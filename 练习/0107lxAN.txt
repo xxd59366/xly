@@ -6,18 +6,29 @@
 
 案例1:为虚拟机 server 静态配置永久的地址参数
 – 主机名:A.xixi.cn
+# hostnamectl set-hostname A.xixi.cn
 – IP地址:172.25.0.120
 – 子网掩码:255.255.255.0
 – 默认网关:172.25.0.254
 – DNS服务器:172.25.254.254
+# nmcli connection modify 'System eth0' ipv4.method manual ipv4.addresses '172.25.0.120/24 172.25.0.254' ipv4.dns 172.25.254.254
+# nmcli connection up 'System eth0'
 
 
 案例2：真机上操作：永久别名与vim的使用
+# vim /root/.bashrc
   1. 定义一个永久别名（修改/root/.bashrc文件)，执行c可以实现还原虚拟机classroom
+alias c='rht-vmctl reset classroom'
   2. 定义一个永久别名（修改/root/.bashrc文件)，执行s可以实现还原虚拟机server
+alias s='rht-vmctl reset server'
   3. 定义一个永久别名（修改/root/.bashrc文件)，执行d可以实现还原虚拟机Desktop
+alias d='rht-vmctl reset desktop'
   4. 定义一个永久别名（修改/root/.bashrc文件)，执行gos可以远程管理server
+alias gos='ssh root@172.25.0.11'
   5. 定义一个永久别名（修改/root/.bashrc文件)，执行god可以远程管理desktop
+alias god='ssh root@172.25.0.10'
+
+# source /root/.bashrc
 
 
 
