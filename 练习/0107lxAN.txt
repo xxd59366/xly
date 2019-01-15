@@ -34,34 +34,61 @@ alias god='ssh root@172.25.0.10'
 
 案例3：虚拟机Server上操作：复制、删除、移动及vim文本编辑器
   1. 在目录/mnt下创建一个子目录public 
+# mkdir /mnt/public
   2. 在目录/mnt/public 创建文件linux.txt,利用vim写入内容 Study Linux
+# touch /mnt/public/linux.txt
+# vim /mnt/public/linux.txt
   3. 将/mnt/public/linux.txt文件复制到/root目录下，同时 改名为 study.txt
+# cp /mnt/public/linux.txt /root/study.txt
   4. 利用vim 修改文件/etc/hostname将其原有内容全部删除，写入新的内容为www.qq.com
+# vim /etc/hostname
   5. 将/etc/passwd 、/etc/resolv.conf、/etc/hostname 同时拷贝到/mnt/public/目录下
+# cp /etc/{passwd,resolv.conf,hostname}
   6. 将文件 /mnt/public/hostname 重改名为 stu.txt 
+# mv /mnt/public/hostname /mnt/public/stu.txt
   7. 创建目录结构/mnt/public/test/vm
+# mkdir -p /mnt/public/test/vm
   7. 将目录 /boot内容中以 vm 开头的 复制到/mnt/public/test/vm目录下 
+# cp /boot/vm* /mnt/public/test/vm
   8. 将/home目录复制到/mnt/public/test/目录下 
+# cp -r /home /mnt/public/test
 
 案例4：虚拟机Server上操作：复制、删除、移动及vim文本编辑器
-  1. 创建目录结构/study/nsd01 
+  1. 创建目录结构/study/nsd01
+# mdkir -p /study/nsd01
   2. 在目录/study/nsd01 创建文件abc.txt,利用vim写入内容 abc.tedu.cn
+# touch /study/nsd01/abc.txt
+# vim /study/nsd01/abc.txt
+abc.tedu.cn
+:wq
   3. 将/study/nsd01/abc.txt文件复制到/opt目录下，同时 改名为 test.txt
+# cp /study/nsd01/abc.txt /opt/test.txt
   4. 利用vim 修改文件/etc/hostname将其原有内容全部删除，写入新的内容为www.sina.com
+# vim /etc/hostname
+www.sina.com
   5. 将/etc/passwd 、/etc/resolv.conf、/etc/hostname 同时拷贝到/study/nsd01/目录下
+# cp /etc/passwd /etc/resolv.conf /etc/hostname /study/nsd01/
   6. 将文件 /study/nsd01/hostname 重改名为 haxi.txt 
+# mv /study/nsd01/hostname /study/nsd01/haxi.txt
   7. 创建目录结构/root/vm
+# mkdir /root/vm
   7. 将目录 /boot内容中以 vm 开头的 复制到/root/vm目录下 
+# cp /boot/vm* /root/vm
   8. 将/home目录复制到/root/vm目录下 
-
+# cp -r /home /root/vm
 
 
 案例4：虚拟机Server上操作：ls与cat、head
   1. 显示根目录下所有内容
+# ls -A /
   2. 显示/etc目录下所有已tab结尾的文件
+# ls /etc/*tab
   3. 显示/etc/resolv.conf文件的详细属性并加上易读的单位
+# ls -lh /etc/resolv.conf
   4. 显示/etc/sysconfig/network-scripts/ifcfg-eth0文件的详细属性并加上易读的单位
+# ls -lh /etc/sysconfig/network-scripts/ifcfg-eth0
   5. 显示/etc/sysconfig/network-scripts/ifcfg-eth0文件的头4行内容
+# head -4 /etc/sysconfig/network-scripts/ifcfg-eth0文
  
 
 

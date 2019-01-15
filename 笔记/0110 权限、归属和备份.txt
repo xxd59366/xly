@@ -1,0 +1,54 @@
+1月10日
+
+上午：权限和归属
+
+一、权限：用户对文件和目录的操作权限
+1.基本权限
+·基本权限的类别
+访问方式（权限）
+读取：允许查看内容-read
+写入：允许修改内容-write
+执行：允许运行和切换-execute
+
+2.权限的适用对象（归属）
+所有者：拥有此文件/目录的用户  u
+  用户：/etc/passwd
+所属组：拥有此文件/目录的组    g
+其他用户：所有者和所属组之外的用户  o
+
+3.查看权限
+·查看文件的权限
+# ls -l
+·查看目录的权限
+# ls -dl
+
+dr-xr-x---.  26 root root  4096 1月  10 10:21 root
+权限位 硬链接数 属主 属组  大小 最后修改时间  文件名
+
+4.设置基本权限
+·使用chmod命令
+- chmod [-R] 归属关系+-=权限类别 文档...
+# mkdir /mydir
+# ls -dl /mkdir
+drwxr-xr-x. 2 root root 6 1月  10 11:01 /mydir/
+# chmod o= /mydir
+# su - student
+$ ls /mydir/
+ls: cannot open directory /mydir/: Permission denied
+# gpasswd -a student root
+# usermod -G root student
+
+# mkdir -m u+rwx,go-rwx /dir1
+
+# chmod u-w,go+rx /dir1
+
+# chmod 750 /dir1
+7=4+2+1
+  r w x
+
+5.设置文档归属
+·使用chown命令
+  - chown [-R] 属主 文档...
+  - chown [-R] :属组 文档...
+  - chown [-R] 属主:属组 文档...
+  

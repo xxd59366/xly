@@ -32,3 +32,99 @@ C:删除本行光标后所有内容并进入插入模式
 :q  退出
 :wq 保存并退出
 :q!
+
+
+
+下午:命令行基础知识,快捷键补全
+
+一.命令行
+
+Linux系统
+命令行
+
+1.提示符
+[root@xly ~]#
+  ·组成
+  root	当前登录的用户名
+  xly   主机名
+  ~     当前工作目录
+  #     权限 #代表管理员  $代表普通用户
+
+  ~ : 家目录
+
+我是谁?我在哪?
+
+2.命令的基本格式
+命令 [选项] 参数     每个元素之间以空格隔开
+命令是动作
+选项是动作的执行方式
+  ·选项:
+    -短选项: -l
+    -长选项: --help
+参数是动作执行的对象
+  ·参数通常是以一个路径的形式去表示
+
+我要做什么?怎么做?在哪做?
+
+3.路径的表示方法
+  1)绝对路径:从根[/]开始的路径
+  2)相对路径:从当前位置开始
+
+4.基本命令
+
+1)man  查看在线手册/帮助
+# man 命令
+按q键退出man
+
+2)ls -- list  查看目录的内容/查看文档信息
+# ls	查看当前工作目录
+# ls / /mnt
+选项:
+  --help	查看帮助手册
+  -l		以长格式查看
+  -A		查看全部文件
+  -d		查看目录本身
+  -h		人类易读
+
+3)cd -- change directory  切换工作路径
+# cd		切换到家目录
+# cd ..		切换到上一级目录
+# cd -		切换到上一个目录
+# cd /xx/xx	切换到指定目录
+
+4)pwd -- print working directory
+在终端输出当前路径
+
+5)cat  查看文件内容
+# cat /路径.../文件
+选项:
+  -n		标注行号
+
+5.yum回顾
+Yum软件包仓库 
+· 自动解决依赖关系
+· Yellowdog Update Manager，黄狗升级管理器
+Yum的使用
+  - yum repolist		列仓库
+  - yum list [软件名]...	列软件
+  - yum clean all		清缓存
+  - yum [-y] install 软件名...	安装软件
+  - yum [-y] remove 软件名...	卸载软件
+Yum的配置
+配置文件路径:
+/etc/yum.repos.d/xx.repo
+
+部署源
+
+# vim /etc/yum.repos.d/yum1.repo
+[Everything]
+name=CentOS 7.4
+baseurl=file:///root/桌面/dvd
+enabled=1
+gpgcheck=0
+
+:wq
+
+# yum repolist
+
+

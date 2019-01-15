@@ -56,8 +56,8 @@ fi
 
 ########################################################
 
-#commit
-commit() {
+#up
+up() {
 
 sleep 1
 cd `dirname $0`
@@ -94,8 +94,8 @@ case $1 in
 init)
 init
 ;;
-commit)
-commit
+up)
+up
 ;;
 pull)
 pull
