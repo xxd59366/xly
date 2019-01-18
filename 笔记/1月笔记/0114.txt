@@ -1,0 +1,66 @@
+1.tarball备份包
+1)tar工具的常用选项
+ -c:创建归档create
+ -x:释放归档
+ -f:制定归档文件名称file
+ -z -j -J:调用.gz .bz2 .xz 格式的工具进行处理
+ -t:显示归档中的文件清单
+ -P:保持归档内文件的绝对路径
+ -C:目录directory
+2)压缩包格式:
+# z---GZIP 压缩速度最快
+# j---Bz2  压缩速度适中
+# J---XZ   压缩速度最慢数据最完整的
+3)压缩命令
+# tar -zcf 文件名(bootbackup.tar.gz) 要备份的文档(/boot/)
+# tar -tf  压缩包名字 查看
+$解压命令
+解压当前目录指令
+# tar -zxf 文件名(bootbackup.tar.gz)或者# tar -xf 文件名(bootbackup.tar.gz)
+解压指定目录指令
+# tar -xf 文件名(bootbackup.tar.gz) -C 解压路径目标(/opt/123/)
+
+2.NTP网络时间协议
+-NTP服务器为客户及提供标准时间
+-NTP客户急需要与NTP服务器保持沟通
+1)rhel7客户端的校时服务
+-软件包:chrony
+-配置文件:/etc/chrony.conf
+系统服务:chrondy
+2)NTP网络时间协议
+#rpm -q chrony 检查服务包
+/etc/services 查看协议网络配置位置
+改写文件指令
+#vim /etc/chrony.conf  编辑文件
+将其他多余的做上#标记
+#systemctl restart chronyd 重新启动程序
+date 查询时间
+
+3.周期性任务
+1)
+软件包:cronie crontabs
+系统服务:crond
+日志文件/varlog/crond
+2)crontab指令
+-u:指定用户
+-e:编辑
+-l:查看
+-r:删除
+编写任务记录
+格式
+*/* * * * * 任务命令(绝对路径)
+分 时 日 月 周 任务命令行(绝对路径)
+
+4.破解密码
+重启电脑
+引导界面在选项选择选项上按e键
+进入编辑找到linux16这行切到这段尾部输入: rd.break console=tty0
+完事按Ctrl+x 进入救援模式到单用户模式显示为switch_root:/# 
+# mount -o remount,rw /sysroot
+# chroot /sysroot
+# passwd root         也可以 echo 密码 | passwd --stdim root 
+设置更改的密码和确认更改密码
+# touch /.autorelabel
+双退出重启
+# exit
+# exit

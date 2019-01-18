@@ -1,0 +1,102 @@
+1月7日
+
+上午：
+
+一、教学环境虚拟机
+# rht-vmctl reset classroom
+# rht-vmctl reset server
+# rht-vmctl reset desktop
+
+srever/desktop 密码：redhat
+
+二、yum的配置及使用
+
+yum --> 应用商店
+
+server0上操作
+
+1.配置目录
+/etc/yum.repos.d/
+2.删除原有yum配置
+# rm -f /etc/yum.repos.d/*
+# yum repolist
+3.挂载镜像
+  3-1 添加光驱设备（小灯泡，CDROM，关机[poweroff]）
+  3-2 添加光盘（rhel7.4）
+  3-3 创建目录
+  # mkdir /root/Desktop/dvd
+  3-4 挂载镜像
+  # mount /dev/cdrom /root/Desktop/dvd
+4.配置yum源
+  4-1 新建配置文件
+  /etc/yum.repos.d/yum1.repo
+  4-2 写文件
+  [rhel7_dvd]              仓库名
+  name=Redhat 7.4 Base     仓库描述信息
+  gpgcheck=0               红帽证书验证
+  enabled=1                开机是否启用
+  baseurl=file:///root/Desktop/dvd  仓库的使用来源
+
+  :wq
+  4.3 测试配置，安装软件
+  # yum repolist
+  # yum install vsftpd httpd
+5.使用yum安装一个xeyes并运行
+  # yum -y install xeyes
+  # xeyes
+
+三、wget下载工具
+1.是个下载工具
+2.用法
+# wget 源地址
+//将目标文件下载到当前位置
+# wget 源地址 -O 目标路径/新文件名
+
+四、升级Linux内核
+· Linux内核文件
+  - 默认位置：/boot/vmlinuz-*
+  - 支持多个内核文件，开机时选择其中一个版本进系统
+· Grub2多系统启动配置
+  - 引导信息:/boot/grub2/grub.cfg
+
+虚拟机：VMWare WoekStation，Hyper -V
+内存：>=8G,4G
+
+双系统：假设现在电脑上已经装过Windows
+1.分盘 -- 100G(2个系统盘)，数据盘300G
+2.做U启动：1)UtralISO(6M);2)ISO镜像;3)U盘：16G；把ISO镜像烧录到U盘中形成U启动盘
+3.BIOS界面选择U启动
+4.查看U盘位置（tab->rescue救援模式进入系统，ls /dev）
+5.在安装界面Tab，修改镜像位置为hd=/dev/sdb4
+6.安装过程中记得分盘
+7.修改启动项配置/boot/grub2/grub.cfg
+
+五、修改网络配置
+1.临时配置及测试
+·查看/设置IP地址
+# ifconfig
+  - ifconfig [接口名]
+  - ifconfig [接口名] IPv4地址/掩码长度
+·临时修改主机名
+# hostname fuwuqi
+2.永久配置
+
+  1)改文件
+    ·永久修改主机名
+    # vim /etc/hostname
+    ·永久修改ip地址
+    # vim /etc/sysconfig/network-script/ifcfg-eth0
+    BOOTPROTO=none/dhcp
+    ONBOOT=yes/no
+    IPADDR=192.168.4.69
+    PREFIX=24
+  2)命令行
+    ·修改主机名
+    # hostnamectl set-hostname fuwuqi.tedu.cn
+    ·修改IP:nmcli连接管理
+    # nmcli connection modify [接口名] ipv4.method manual ipv4.address 192.168.4.69/24 ipv4.gatway 192.168.4.254 ipv4.dns 8.8.8.8 autoconnect yes
+    
+    # nmtui
+    # systemctl restart network
+
+

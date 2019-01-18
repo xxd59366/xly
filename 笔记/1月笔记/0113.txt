@@ -1,0 +1,159 @@
+上午
+一,硬盘的分区管理
+1.识别硬盘>分区规划>格式化>挂载使用
+毛坯房 > 划分区域> 装修 > 入驻
+格式化:制作文件系统:决定数据文件的排列顺序
+
+2.MBR/msdos 分区模式
+1) 1~4个主分区,或者0~3个主分区+一个扩展分区(n个逻辑分区)
+扩展分区和主分区是同一级别
+逻辑分区是建立在扩展分区之上的,建立逻辑分区需要有扩展分区存在为前提
+扩展分区不会占用太多
+2)最大支持容量为 2.2TB 的磁盘
+3)扩展分区不能格式化
+
+3.磁盘格式
+1)磁盘类型名称
+-IDE=HD
+-SATA=SD
+-VirtIO=vd 
+2)文件名表示含义
+如 vda1
+vd=类型
+a=磁盘编号
+1=分区编号
+
+4.使用fdisk分区工具
+1)查看分区表
+# fdisk -l /dev/sda
+2)修改硬盘分区表
+# fdisk /dev/sda  指令 /路径/目标
+3)常用交互指令
+# -d  删除
+# -n  新建
+# -p  列处现有分区表  
+# -q  放弃改写并退出
+# -w  保存更改并退出
+
+5.分区过程
+# fdisk /dev/sda
+命令(输入 m 获取帮助)：n    
+Partition type:
+   p   primary (0 primary, 0 extended, 4 free)
+   e   extended
+Select (default p):                选择主分区p还是扩展分区e
+Using default response p
+分区号 (1-4，默认 1)：
+起始 扇区 (2048-20971519，默认为 2048)：
+将使用默认值 2048
+Last 扇区, +扇区 or +size{K,M,G} (2048-20971519，默认为 20971519)：+2G  
+分区 1 已设置为 Linux 类型，大小设为 2 GiB
+
+命令(输入 m 获取帮助)：p
+
+磁盘 /dev/sda：10.7 GB, 10737418240 字节，20971520 个扇区
+Units = 扇区 of 1 * 512 = 512 bytes
+扇区大小(逻辑/物理)：512 字节 / 512 字节
+I/O 大小(最小/最佳)：512 字节 / 512 字节
+磁盘标签类型：dos
+磁盘标识符：0xc0d85d49
+
+   设备 Boot      Start         End      Blocks   Id  System
+/dev/sda1            2048     4196351     2097152   83  Linux
+
+命令(输入 m 获取帮助)：w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+正在同步磁盘。  
+
+6.lsblk:查看分区状态
+# lsblk
+NAME   MAJ:MIN RM SIZE RO TYPE MOUNTPOINT
+sda      8:0    0  10G  0 disk 
+├─sda1   8:1    0   2G  0 part 
+├─sda2   8:2    0   2G  0 part 
+├─sda3   8:3    0   2G  0 part 
+├─sda4   8:4    0   1K  0 part 
+├─sda5   8:5    0   1G  0 part 
+└─sda6   8:6    0   3G  0 part 
+sdb      8:16   0  10G  0 disk 
+sdc      8:32   0  20G  0 disk 
+sdd      8:48   0  20G  0 disk 
+vda    253:0    0  10G  0 disk 
+└─vda1 253:1    0  10G  0 part /
+vdb    253:16   0  10G  0 disk  
+
+7.更新分区表
+partprobe 
+
+8.常用的格式化工具
+1)mkfs 做文件系统工具集
+-mkfs.ext3 分区设备路径
+-mkfs.ext4 分区设备路径 
+-mkfs.xfs  分区设备路径
+-mkfs.vfat -F 32分区设备路径
+2)查看分区详细信息(包括IDhe详细格式)
+blkid /dev/文件名
+
+9.创建文件系统
+按照不同的类型格式化分区
+-/dev/vdb2 ==> EXT4类型
+-/dev/vdb3 ==> XFS类型
+# mkfs.ext4 /dev/vdb2
+# mkfs.xfs /dev/vdb3
+
+二.访问文件系统
+1.访问格式化的分区
+1)使用mount命令挂载,并访问测试
+2)使用df检查使用情况
+格式:#df -hT /路径/目标
+2.实现开机自动挂载
+# mkdir /mnt/part3 创建挂载点
+# vim /etc/fstab   配置文件
+ 配置文件的记录格式
+-设备路径    挂载点       类型 参数 备份标记 检测顺序
+/dev/vdb3 /mnt/part3 xfs defaults 0 0
+检测配置
+# mount -a 
+# df -hT /mnt/part3
+
+下午
+二.LVM逻辑卷
+1.LVM的工作方式
+在"分区-->格式化"中间增加的一个逻辑层
+零散空闲储存=物理卷
+整合的虚拟磁盘=卷组
+虚拟的分区=逻辑卷
+
+2.LVM管理工具集
+功能
+Scan扫描    卷组管理vg... 逻辑卷lv...
+Create创建  卷组管理vg... 逻辑卷lv...
+Display显示 卷组管理vg... 逻辑卷lv...
+Remove删除  卷组管理vg... 逻辑卷lv...
+Extend扩展  卷组管理vg... 逻辑卷lv...
+
+3.LVM快速部署及使用
+基本思路
+创建卷组-创建逻辑卷-格式化-挂载
+准备至少一个空闲分区(//devvdb1)
+创建卷组:vgcreate 卷组名 空闲分区...
+创建逻辑卷:lvcreate -L 大小 -n 名称 卷组名
+
+三.tar备份的过程
+压缩的过程
+tar -czvPF sys.tar.gz /
+c:压缩
+z:以gz的格式去压缩
+v:列举压缩的过程
+P:以原路径打包(绝对路径)
+f:指向输出(指定输出文件)
+输出结果
+/后是打包内容
+解压包格式
+tar -xPf 包名 -C 输出位置
+x:解压
+P:以原路径
+f:指向路径
+
